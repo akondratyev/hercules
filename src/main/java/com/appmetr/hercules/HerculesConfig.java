@@ -2,7 +2,9 @@ package com.appmetr.hercules;
 
 import com.appmetr.hercules.annotations.Entity;
 import com.appmetr.hercules.annotations.WideEntity;
+import com.datastax.driver.core.TypeCodec;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +20,9 @@ public class HerculesConfig {
     private int cassandraThriftSocketTimeout;
 
     /* Fields */
-    private Set<Class> entityClasses;
-    private Set<Class> wideEntityClasses;
+    private Set<Class> entityClasses = Collections.emptySet();
+    private Set<Class> wideEntityClasses = Collections.emptySet();
+    private Set<TypeCodec> codecs = Collections.emptySet();
 
     public HerculesConfig() {
     }
@@ -32,8 +35,8 @@ public class HerculesConfig {
         this.replicationFactor = replicationFactor;
         this.schemaModificationEnabled = schemaModificationEnabled;
 
-        this.entityClasses = new HashSet<Class>();
-        this.wideEntityClasses = new HashSet<Class>();
+        this.entityClasses = new HashSet<>();
+        this.wideEntityClasses = new HashSet<>();
 
         for (Class entityClass : entityClasses) {
             if (entityClass.isAnnotationPresent(Entity.class)) {
@@ -90,6 +93,14 @@ public class HerculesConfig {
 
     public Set<Class> getEntityClasses() {
         return entityClasses;
+    }
+
+    public Set<TypeCodec> getCodecs() {
+        return codecs;
+    }
+
+    public void setCodecs(Set<TypeCodec> codecs) {
+        this.codecs = codecs;
     }
 
     public void setEntityClasses(Set<Class> entityClasses) {
